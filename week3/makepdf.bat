@@ -23,11 +23,19 @@ for %%f in (*.md) do (
     :: 移除 -V geometry（解决选项冲突，后面解释）
     pandoc "%%f" --template=../default-template.latex  --pdf-engine=xelatex --resource-path=. -o "!filename!.pdf"
     
+    
     if %errorlevel% equ 0 (
         echo 转换成功：!filename!.pdf
     ) else (
         echo 转换失败：%%f
     )
+    pandoc "%%f" --template=../default-template.latex  --pdf-engine=xelatex --resource-path=. -o "24325157-梁玮麟-!filename!实验报告.pdf"
+    if %errorlevel% equ 0 (
+        echo 转换成功：24325157-梁玮麟-!filename!实验报告.pdf
+    ) else (
+        echo 转换失败：%%f
+    )
+
     echo ----------------------
 )
 

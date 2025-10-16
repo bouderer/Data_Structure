@@ -10,7 +10,7 @@ if not exist "*.md" (
     pause
     exit /b 1
 )
-if not exist "..\default-template.latex" (
+if not exist "default-template.latex" (
     echo 错误：上一级目录找不到default-template.latex！
     pause
     exit /b 1
