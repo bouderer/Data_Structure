@@ -9,6 +9,7 @@ const int dy[] = {0, 1, 0, -1};
 struct AkariPuzzle {
     int rows, cols;
     char grid[50][50];    // 假设最大尺寸为50x50（可根据需求调整）
+    int capable[50][50]; // 标记数字格子上下左右的四个方位是否可以放置灯泡
     int LitCnt[50][50];   // 标记格子被几盏灯点亮
     bool hasLight[50][50];// 标记格子是否放置了灯泡
     bool solved;          // 标记是否找到解
@@ -22,7 +23,13 @@ struct AkariPuzzle {
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 grid[i][j] = input[i * cols + j];
-                if(grid[i][j]=='.') WhiteGrids++;
+                capable[i][j]=0;//有数字的格子，如果最后符合条件，也是0.所以初始化为0，最后好比较
+                if(grid[i][j]=='.'){
+                    WhiteGrids++;
+                } 
+                if(grid[i][j]>='0'&& grid[i][j]<='4'){
+                    capable[i][j]=grid[i][j]-'0';
+                }
                 LitCnt[i][j] = 0;
                 hasLight[i][j] = false;
             }
@@ -36,6 +43,9 @@ struct AkariPuzzle {
         for (int d = 0; d < 4; ++d) {
             int nx = x + dx[d];
             int ny = y + dy[d];
+            //添加两行代码，查找当前上下左右有没有数字格子，如果有数字格子且capable<=0，说明不能放灯
+            if(nx<0 || nx>=rows || ny<0 || ny>=cols) continue;
+            if(grid[nx][ny]>='0'&&grid[nx][ny]<='4' && capable[nx][ny]<=0) return false;
             while (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
                 if (grid[nx][ny] != '.') break;
                 if (hasLight[nx][ny]) return false;
@@ -48,6 +58,14 @@ struct AkariPuzzle {
 
     // 放置灯泡后，更新照亮区域
     void placeLight(int x, int y) {
+        for(int d=0;d<4;++d){
+            int nx=x+dx[d];
+            int ny=y+dy[d];
+            if(nx<0 || nx>=rows || ny<0 || ny>=cols) continue;
+            if(grid[nx][ny]>='0'&&grid[nx][ny]<='4'){
+                capable[nx][ny]--;//capable一定大于0才能运行这个函数。
+            }
+        }//如果能运行这个函数，证明至少能放灯。寻找这个位置四周有没有数字，有的话数字-1
         hasLight[x][y] = true;
         LitCnt[x][y]++;
         if(LitCnt[x][y]==1) Count++;
@@ -68,6 +86,14 @@ struct AkariPuzzle {
 
     // 移除灯泡及对应的照亮区域
     void removeLight(int x, int y) {
+        for(int d=0;d<4;++d){
+            int nx=x+dx[d];
+            int ny=y+dy[d];
+            if(nx<0 || nx>=rows || ny<0 || ny>=cols) continue;
+            if(grid[nx][ny]>='0'&&grid[nx][ny]<='4'&& capable[nx][ny]<(grid[nx][ny]-'0')){
+                capable[nx][ny]++;
+            }
+        }//找附近有没有数字。有的话对应位置的capable+1.
         hasLight[x][y] = false;
         LitCnt[x][y]--;
         if(LitCnt[x][y]==0) Count--;
@@ -91,19 +117,7 @@ struct AkariPuzzle {
     bool checkBlackCells() {
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
-                if (grid[i][j] >= '0' && grid[i][j] <= '9') {
-                    int cnt = 0;
-                    for (int d = 0; d < 4; ++d) {
-                        int nx = i + dx[d];
-                        int ny = j + dy[d];
-                        if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && hasLight[nx][ny]) {
-                            cnt++;
-                        }
-                    }
-                    if (cnt != grid[i][j] - '0') {
-                        return false;
-                    }
-                }
+                if(capable[i][j] != 0) return false;
             }
         }
         return true;
