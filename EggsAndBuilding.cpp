@@ -75,77 +75,77 @@ class EggDropTest{
 // guaranteed at worst 300 floors, and at worst 10 eggs.
 
 
-// È« Ö±      Ï¸      Ä¶  å£©
-const int MAX_EGGS = 10;    //   ó¼¦µ     1-10  
-const int MAX_TRIES = 300;  //      Ô´     1-300  
-const int MAX_FLOORS = 300; //    Â¥      1-300  
+// È«¾Ö±äÁ¿£¨ÑÏ¸ñ¶ÔÆëÄãµÄ¶¨Òå£©
+const int MAX_EGGS = 10;    // ×î´ó¼¦µ°Êı£¨1-10£©
+const int MAX_TRIES = 300;  // ×î´ó²âÊÔ´ÎÊı£¨1-300£©
+const int MAX_FLOORS = 300; // ×î´óÂ¥²ãÊı£¨1-300£©
 
-// dp[i][j]  i Åµ   j Î²    Ü¸  Çµ    Â¥        Äº  Ä¶  å£©
+// dp[i][j]£ºi¿Åµ°¡¢j´Î²âÊÔÄÜ¸²¸ÇµÄ×î´óÂ¥²ãÊı£¨ÄãµÄºËĞÄ¶¨Òå£©
 int dp[MAX_EGGS + 1][MAX_TRIES + 1];
 
-// next_k[i][j][r]  i Åµ   j Î²  Ô¡   Ç°     Ô· Î§    rÊ±    Ò»     Å²   Â¥   Æ«    
-// r    Ç°     Ôµ Â¥ ã·¶Î§   È£   [1,36]  r=36  [9,36]  r=28  
+// next_k[i][j][r]£ºi¿Åµ°¡¢j´Î²âÊÔ¡¢µ±Ç°´ı²âÊÔ·¶Î§³¤¶ÈrÊ±£¬ÏÂÒ»²½×îÓÅ²âÊÔÂ¥²ãµÄÆ«ÒÆÁ¿
+// r£ºµ±Ç°´ı²âÊÔµÄÂ¥²ã·¶Î§³¤¶È£¨Èç[1,36]µÄr=36£¬[9,36]µÄr=28£©
 int next_k[MAX_EGGS + 1][MAX_TRIES + 1][MAX_FLOORS + 1];
 
-//   Ê¼  dp  next_k    
+// ³õÊ¼»¯dpºÍnext_kÊı×é
 void initAnswers() {
-    //   Ò»      Ê¼  dp   é£¨ Ï¸   Ä¶  å£©
-    //  ß½     1  0 Åµ   0 Î²  Ô£     0  
+    // µÚÒ»²½£º³õÊ¼»¯dpÊı×é£¨ÑÏ¸ñ°´ÄãµÄ¶¨Òå£©
+    // ±ß½çÌõ¼ş1£º0¿Åµ°»ò0´Î²âÊÔ£¬¸²¸Ç0²ã
     for (int i = 0; i <= MAX_EGGS; i++) dp[i][0] = 0;
     for (int j = 0; j <= MAX_TRIES; j++) dp[0][j] = 0;
 
-    //  ß½     2  1 Åµ   j Î²  Ô£   à¸²  j ã£¨Ö»     â£©
+    // ±ß½çÌõ¼ş2£º1¿Åµ°¡¢j´Î²âÊÔ£¬×î¶à¸²¸Çj²ã£¨Ö»ÄÜÖğ²ã²â£©
     for (int j = 1; j <= MAX_TRIES; j++) {
         dp[1][j] = j;
-        if (dp[1][j] > MAX_FLOORS) dp[1][j] = MAX_FLOORS + 1; //     300    Îª301
+        if (dp[1][j] > MAX_FLOORS) dp[1][j] = MAX_FLOORS + 1; // ³¬¹ı300²ã±ê¼ÇÎª301
     }
 
-    //  ß½     3  i Åµ   1 Î²  Ô£   à¸²  1 ã£¨Ö» Ü² 1 ã£©
+    // ±ß½çÌõ¼ş3£ºi¿Åµ°¡¢1´Î²âÊÔ£¬×î¶à¸²¸Ç1²ã£¨Ö»ÄÜ²â1²ã£©
     for (int i = 1; i <= MAX_EGGS; i++) {
         dp[i][1] = 1;
     }
 
-    //   Ì¬ æ»®        dp[i][j]  i  2  j  2  
-    //    Ä¹ Ê½  dp[i][j] = dp[i-1][j-1] + dp[i][j-1] + 1
-    //   Ê½   å£º
-    // 1. dp[i-1][j-1]    Ç°     Ë£   i-1 Åµ   j-1 Î²  Â· Â¥  
-    // 2. dp[i][j-1]    Ç°  Ã» é£¬  i Åµ   j-1 Î²  Ï· Â¥  
-    // 3. +1    Ç°   Ôµ   Ò»  
+    // ¶¯Ì¬¹æ»®Ìî±í£º¼ÆËãdp[i][j]£¨i¡İ2£¬j¡İ2£©
+    // ºËĞÄ¹«Ê½£ºdp[i][j] = dp[i-1][j-1] + dp[i][j-1] + 1
+    // ¹«Ê½º¬Òå£º
+    // 1. dp[i-1][j-1]£ºµ±Ç°µ°ËéÁË£¬ÓÃi-1¿Åµ°¡¢j-1´Î²âÏÂ·½Â¥²ã
+    // 2. dp[i][j-1]£ºµ±Ç°µ°Ã»Ëé£¬ÓÃi¿Åµ°¡¢j-1´Î²âÉÏ·½Â¥²ã
+    // 3. +1£ºµ±Ç°²âÊÔµÄÕâÒ»²ã
     for (int i = 2; i <= MAX_EGGS; i++) {
         for (int j = 2; j <= MAX_TRIES; j++) {
             dp[i][j] = dp[i-1][j-1] + dp[i][j-1] + 1;
-            if (dp[i][j] > MAX_FLOORS) dp[i][j] = MAX_FLOORS + 1; //     300    
+            if (dp[i][j] > MAX_FLOORS) dp[i][j] = MAX_FLOORS + 1; // ³¬¹ı300²ã±ê¼Ç
         }
     }
 
-    //  Ú¶       Ê¼  next_k   é£¨ Ø¼        dp     Æµ     Æ«      
-    //        Ğ¼          Ô´          Ô· Î§    
+    // µÚ¶ş²½£º³õÊ¼»¯next_kÊı×é£¨¹Ø¼ü£¡°´ÄãµÄdp¶¨ÒåÍÆµ¼×îÓÅÆ«ÒÆÁ¿£©
+    // ±éÀúËùÓĞ¼¦µ°Êı¡¢²âÊÔ´ÎÊı¡¢´ı²âÊÔ·¶Î§³¤¶È
     for (int i = 1; i <= MAX_EGGS; i++) {
         for (int j = 1; j <= MAX_TRIES; j++) {
-            for (int r = 1; r <= MAX_FLOORS; r++) { // r    Ç°     Ô· Î§    
+            for (int r = 1; r <= MAX_FLOORS; r++) { // r£ºµ±Ç°´ı²âÊÔ·¶Î§³¤¶È
                 if (r == 0) {
                     next_k[i][j][r] = 0;
                     continue;
                 }
 
-                //    1  1 Åµ   Ö»     â£¬Æ«    Îª1   âµ±Ç°  Î§ Äµ 1 ã£©
+                // Çé¿ö1£º1¿Åµ°£¬Ö»ÄÜÖğ²ã²â£¬Æ«ÒÆÁ¿Îª1£¨²âµ±Ç°·¶Î§µÄµÚ1²ã£©
                 if (i == 1) {
                     next_k[i][j][r] = 1;
                     continue;
                 }
 
-                //    2     Ô´   j=1  Ö» Ü²âµ±Ç°  Î§ Äµ 1 ã£¨Æ«    1  
+                // Çé¿ö2£º²âÊÔ´ÎÊıj=1£¬Ö»ÄÜ²âµ±Ç°·¶Î§µÄµÚ1²ã£¨Æ«ÒÆÁ¿1£©
                 if (j == 1) {
                     next_k[i][j][r] = 1;
                     continue;
                 }
 
-                //    3  i  2  j  2   Æµ     Æ«    k
-                //     k  Ô­   Ãµ Ç°1 Î²  Ô£     Î§r Ö³      Ö£ Ê¹     Ö¶  Ü± Ê£    Ô´       
-                //     k = dp[i-1][j-1] + 1   Â·     Ü¸   dp[i-1][j-1] ã£¬   Ô²  k ã£©
+                // Çé¿ö3£ºi¡İ2£¬j¡İ2£¬ÍÆµ¼×îÓÅÆ«ÒÆÁ¿k
+                // ×îÓÅkµÄÔ­Ôò£ºÓÃµ±Ç°1´Î²âÊÔ£¬½«·¶Î§r·Ö³ÉÁ½²¿·Ö£¬Ê¹Á½²¿·Ö¶¼ÄÜ±»Ê£Óà²âÊÔ´ÎÊı¸²¸Ç
+                // ×îÓÅk = dp[i-1][j-1] + 1£¨ÏÂ·½×î¶àÄÜ¸²¸Çdp[i-1][j-1]²ã£¬ËùÒÔ²âµÚk²ã£©
                 int optimal_k = dp[i-1][j-1] + 1;
 
-                //       k   Ü³     Ç°  Î§    r      r=5  k      8  
+                // ĞŞÕı£ºk²»ÄÜ³¬¹ıµ±Ç°·¶Î§³¤¶Èr£¨±ÈÈçr=5£¬k²»ÄÜÊÇ8£©
                 if (optimal_k > r) optimal_k = r;
 
                 next_k[i][j][r] = optimal_k;
@@ -158,47 +158,49 @@ int minTimesForBuilding(int eggs, int numFloors) {
     if (eggs > MAX_EGGS) eggs = MAX_EGGS;
     if (numFloors > MAX_FLOORS) numFloors = MAX_FLOORS;
 
-    //        Ô´   j   Òµ   Ğ¡  jÊ¹dp[eggs][j]  numFloors
+    // ±éÀú²âÊÔ´ÎÊıj£¬ÕÒµ½×îĞ¡µÄjÊ¹dp[eggs][j]¡İnumFloors
     for (int j = 1; j <= MAX_TRIES; j++) {
         if (dp[eggs][j] >= numFloors) {
             return j;
         }
     }
-    return MAX_TRIES; //  î»µ       300  
+    return MAX_TRIES; // ×î»µÇé¿ö·µ»Ø300´Î
 }
-//       Ò»     ÔµÄ¾   Â¥  
-//     Ëµ    
-// totalFloors    Â¥        Ä¿   Æ¡ 300  
-// eggsLeft  Ê£ à¼¦    
-// lastSurvival    Ò» Î¼   Ã»   Â¥ ã£¨  Ê¼0  
-// lastBreak    Ò» Î¼      Ëµ Â¥ ã£¨  Ê¼totalFloors+1  
+// ¼ÆËãÏÂÒ»²½²âÊÔµÄ¾ø¶ÔÂ¥²ã
+// ²ÎÊıËµÃ÷£º
+// totalFloors£º×ÜÂ¥²ãÊı£¨ÌâÄ¿ÏŞÖÆ¡Ü300£©
+// eggsLeft£ºÊ£Óà¼¦µ°Êı
+// lastSurvival£ºÉÏÒ»´Î¼¦µ°Ã»ËéµÄÂ¥²ã£¨³õÊ¼0£©
+// lastBreak£ºÉÏÒ»´Î¼¦µ°ËéÁËµÄÂ¥²ã£¨³õÊ¼totalFloors+1£©
 int nextTestFloor(int totalFloors, int eggsLeft, int lastSurvival, int lastBreak) {
-    //  ß½      Ğ¶ 
+    // ±ß½çÌõ¼şÅĞ¶Ï
     if (eggsLeft <= 0 || eggsLeft > MAX_EGGS) return -1;
     if (totalFloors <= 0 || totalFloors > MAX_FLOORS) return -1;
-    if (lastSurvival >= lastBreak) return -1; //   Î§               
+    if (lastSurvival >= lastBreak) return -1; // ·¶Î§ÒÑËø¶¨£¬ÎŞĞè²âÊÔ
 
-    // 1.    ãµ±Ç°     ÔµÄ· Î§    r  [lastSurvival+1, lastBreak-1] Ä³   
+    // 1. ¼ÆËãµ±Ç°´ı²âÊÔµÄ·¶Î§³¤¶Èr£º[lastSurvival+1, lastBreak-1]µÄ³¤¶È
     int current_range = lastBreak - lastSurvival - 1;
     if (current_range <= 0) return -1;
 
-    // 2.  Òµ   Ç°       Ğ¡   Ô´   j    minTimesForBuilding Ä½    
-    int required_tries = minTimesForBuilding(eggsLeft, totalFloors);
+    // 2. ÕÒµ½µ±Ç°ËùĞèµÄ×îĞ¡²âÊÔ´ÎÊıj£¨¼´minTimesForBuildingµÄ½á¹û£©
+    
+//	int required_tries = minTimesForBuilding(eggsLeft, totalFloors); 
+    int required_tries = minTimesForBuilding(eggsLeft, current_range);
 
-    // 3.   È¡    Æ«    k      Úµ Ç°  Î§ Äµ k ã£©
+    // 3. »ñÈ¡×îÓÅÆ«ÒÆÁ¿k£¨Ïà¶ÔÓÚµ±Ç°·¶Î§µÄµÚk²ã£©
     int k = next_k[eggsLeft][required_tries][current_range];
 
-    // 4. ×ª  Îª    Â¥ ã£º  Ç°  Î§ Äµ k   = lastSurvival + k
+    // 4. ×ª»»Îª¾ø¶ÔÂ¥²ã£ºµ±Ç°·¶Î§µÄµÚk²ã = lastSurvival + k
     int next_floor = lastSurvival + k;
 
-    // 5.  ß½       È·   ÚºÏ·   Î§ Ú£ 
+    // 5. ±ß½çĞŞÕı£¨È·±£ÔÚºÏ·¨·¶Î§ÄÚ£©
     if (next_floor < lastSurvival + 1) next_floor = lastSurvival + 1;
     if (next_floor > lastBreak - 1) next_floor = lastBreak - 1;
 
     return next_floor;
 }
 
-//     i Åµ   j Î²    Ü¸  Çµ    Â¥      Ö± Ó·   dp[i][j]  
+// ¼ÆËãi¿Åµ°¡¢j´Î²âÊÔÄÜ¸²¸ÇµÄ×î´óÂ¥²ãÊı£¨Ö±½Ó·µ»Ødp[i][j]£©
 int canHandleFloors(int eggs, int numTries) {
     if (eggs <= 0 || numTries <= 0) return 0;
     if (eggs > MAX_EGGS) eggs = MAX_EGGS;
@@ -206,7 +208,7 @@ int canHandleFloors(int eggs, int numTries) {
     return dp[eggs][numTries];
 }
 
-//     i Åµ   f  Â¥       Ğ¡   Ô´         Ğ¡jÊ¹dp[i][j]  f  
+// ¼ÆËãi¿Åµ°²âf²ãÂ¥ËùĞèµÄ×îĞ¡²âÊÔ´ÎÊı£¨ÕÒ×îĞ¡jÊ¹dp[i][j]¡İf£©
 
 
 
