@@ -105,6 +105,8 @@ Start
   |       建立小根堆 q
   |       visited[1..N] = false
   |       q.push(i, 0)
+  ```
+  ```
   |
   |       while q 非空:
   |            取出堆顶 (c, dist)
@@ -177,6 +179,8 @@ End
 #include <algorithm>
 #define MAX 1e9
 using namespace std;
+  ```
+  ```cpp
 struct cmp {
     bool operator()(pair<int, int> &a, pair<int, int> &b) {
         return a.second > b.second;
@@ -258,6 +262,8 @@ Start
   |
   |--> 读入 K 条边 (u, v, d):
   |       dp[u][v] = min(dp[u][v], d)   (处理重边)
+  ```
+  ```
   |
   |--> for k = 1..N:
   |       for i = 1..N:
@@ -332,6 +338,8 @@ int main() {
         cin >> u >> v >> d;
         dp[u][v]=dp[u][v]< d? dp[u][v]:d;
     }
+  ```
+  ```cpp
     for(int k=1;k<=N;k++){
         //不同的中间节点
         for(int i=1;i<=N;i++){
@@ -472,6 +480,8 @@ One line, for each test will have the amount of fuel needed by the robot.
 8 13 2 15
 1 1 1 4
 10 10
+  ```
+  ```
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
@@ -545,6 +555,8 @@ Start
   |                 计算 (nr,nc)
   |                 若越界: continue
   |                 nd = w + weight[nr][nc]
+  ```
+  ```
   |                 若 nd < dst[nr][nc]:
   |                       dst[nr][nc] = nd
   |                       q.push(nd, (nr,nc))
@@ -612,6 +624,8 @@ int main(){
         for(int i=0;i<rows;i++)
             for(int j=0;j<cols;j++)
                 cin >> weight[i][j];
+  ```
+  ```cpp
 
         int s_row, s_col, e_row, e_col;
         cin >> s_row >> s_col >> e_row >> e_col;
@@ -675,51 +689,6 @@ int main(){
 2 2 2 2 2 2 2 2 2 2
 2 2 2 2 2 2 2 2 2 2
 5 5 10 1
-10 10
-1 1 1 1 1 100 1 1 1 1
-1 1 1 1 1 100 1 100 1 1
-1 1 1 1 1 100 1 100 1 1
-1 1 1 1 1 100 1 100 1 1
-1 1 1 1 1 1 1 100 1 1
-1 1 1 1 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1
-5 5 1 10
-4 4
-1 1 1 1
-1 1 1 1
-1 1 1 1
-1 1 1 1
-1 1 1 4
-5 5
-1 1 5 3 2
-4 1 4 2 6
-3 1 1 3 3 
-5 2 3 1 2
-2 1 1 1 1
-1 1 5 5 
-5 4
-2 2 15 1
-5 1 15 1
-5 3 10 1
-5 2 1 1 
-8 13 2 15
-1 1 1 4 
-10 10
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 1 1 1 1 1 1 1 1 
-1 1 10 10
-100 100
 ...
 ```
 
