@@ -11,9 +11,21 @@ public:
     // 解析时间戳 [HH:MM:SS] -> 秒数 (从当天0点开始)
     static long long parseTimestamp(const std::string& timeStr) {
         // 格式示例: [00:01:00]
-        // TODO: 解析字符串，转换为秒数返回
-        // 简单实现提示: sscanf 或 string::substr + stoi
+        long long hours, minutes, seconds;
+        if(sscanf(timeStr.c_str(), "[%lld:%lld:%lld]", &hours, &minutes, &seconds) == 3) {
+            return hours * 3600 + minutes * 60 + seconds;
+        }
         return 0; 
+    }
+
+    // 将秒数转换回 [HH:MM:SS] 格式
+    static std::string formatTimestamp(long long totalSeconds) {
+        long long hours = totalSeconds / 3600;
+        long long minutes = (totalSeconds % 3600) / 60;
+        long long seconds = totalSeconds % 60;
+        char buf[32];
+        sprintf(buf, "[%02lld:%02lld:%02lld]", hours, minutes, seconds);
+        return std::string(buf);
     }
 };
 

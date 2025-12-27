@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build active file",
+            "command": "g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "-std=c++11",
+                "-O2",
+                "-I${workspaceFolder}/HotWordSystem/src",
+                "-I${workspaceFolder}",
+                "-I${workspaceFolder}/cppjieba",
+                "${workspaceFolder}/HotWordSystem/src/main.cpp",
+                "-o",
+                "${workspaceFolder}/HotWordSystem/bin/hotwords.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/HotWordSystem"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ]
+}
