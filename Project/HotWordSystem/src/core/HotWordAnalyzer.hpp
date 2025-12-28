@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <deque>
 #include <queue>
 #include <algorithm>
@@ -196,6 +197,78 @@ public:
             }
             result[word] = {times, counts};
         }
+        return result;
+    }
+
+    // 获取“爆发性”趋势分析：基于 75 分位数准入和斜率计算
+    // 返回：{时间轴, 阈值线, 单词数据(词->频率列表)}
+    struct BurstTrendData {
+        std::vector<long long> times;
+        std::vector<int> thresholds;
+        std::unordered_map<std::string, std::vector<int>> wordCounts;
+    };
+
+    BurstTrendData getBurstTrends(int intervalSeconds) {
+        BurstTrendData result;
+        if (fullHistory.empty()) return result;
+
+        long long startTime = 0;
+        long long endTime = currentTime;
+        if (intervalSeconds <= 0) intervalSeconds = 60;
+        int numBuckets = (endTime - startTime) / intervalSeconds + 1;
+
+        // 1. 分桶统计
+        std::vector<std::unordered_map<std::string, int>> bucketStats(numBuckets);
+        for (const auto& record : fullHistory) {
+            int bucket = (record.timestamp - startTime) / intervalSeconds;
+            if (bucket >= 0 && bucket < numBuckets) {
+                bucketStats[bucket][record.word]++;
+            }
+        }
+
+        // 2. 计算每个桶的 75 分位数作为阈值
+        result.times.resize(numBuckets);
+        result.thresholds.resize(numBuckets);
+        std::unordered_set<std::string> activeWords;
+
+        for (int i = 0; i < numBuckets; ++i) {
+            result.times[i] = startTime + i * intervalSeconds;
+            
+            if (bucketStats[i].empty()) {
+                result.thresholds[i] = 0;
+                continue;
+            }
+
+            std::vector<int> freqs;
+            for (auto const& it : bucketStats[i]) freqs.push_back(it.second);
+            
+            // 计算 75 分位数 (Top 25%)
+            size_t n = freqs.size();
+            size_t targetIdx = static_cast<size_t>(n * 0.75);
+            if (targetIdx >= n) targetIdx = n - 1;
+            std::nth_element(freqs.begin(), freqs.begin() + targetIdx, freqs.end());
+            int p75 = freqs[targetIdx];
+            result.thresholds[i] = p75;
+
+            // 找出超过阈值的词
+            for (auto const& it : bucketStats[i]) {
+                if (it.second >= p75 && p75 > 0) {
+                    activeWords.insert(it.first);
+                }
+            }
+        }
+
+        // 3. 提取这些活跃词在所有阶段的频率
+        for (const auto& word : activeWords) {
+            std::vector<int> counts(numBuckets, 0);
+            for (int i = 0; i < numBuckets; ++i) {
+                if (bucketStats[i].count(word)) {
+                    counts[i] = bucketStats[i][word];
+                }
+            }
+            result.wordCounts[word] = counts;
+        }
+
         return result;
     }
 

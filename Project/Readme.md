@@ -13,7 +13,7 @@
 
 ![alt text](image.png)
 
-然后`F11`编译运行即可。输出文件`output.txt`如果与`std.txt`一致，说明环境没问题。
+然后`F11`编译运行即可。输出文件`data/output.txt`如果与`data/std.txt`一致，说明环境没问题。
 
 Jieba分词要求中文编码**必须**为`UTF-8`，否则分词将失败，请务必确保输入的中文字符串的编码为`UTF-8`。
 

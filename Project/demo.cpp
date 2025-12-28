@@ -1,28 +1,28 @@
-// ============================= demo.cpp =====================================
-// Ä¿±ê£ºÑİÊ¾ cppjieba ÔÚ¡°ÎÄ¼şÊäÈë -> ·Ö´Ê/±ê×¢/¹Ø¼ü´Ê -> ÎÄ¼şÊä³ö¡±Á÷³Ì¡£
-// Ê¾ÀıÖ÷Ìâ£ºÖĞÉ½´óÑ§ ¼ÆËã»úÑ§ÔºµÄÑ§Ï°Óë¿ÆÑĞÕıÄÜÁ¿³¡¾°£¨¾ä×Ó·ÅÔÚÊäÈëÎÄ¼şÖĞ£¬²»Ö±½ÓĞ´ËÀÔÚ´úÂëÀï£©¡£
-// ÖØÒªÒªÇó£ºÎª±ÜÃâ Windows ¿ØÖÆÌ¨±àÂëÎÊÌâ£¬´úÂëÖĞ²»Ö±½ÓÏòÖÕ¶ËÊä³öÈÎºÎÖĞÎÄ£¨Ö»Êä³öÓ¢ÎÄÌáÊ¾£©¡£
-// Èç¹ûĞèÒª²é¿´ÖĞÎÄ½á¹û£¬Çë´ò¿ªÊä³öÎÄ¼ş£¨UTF-8 ±àÂë£©¡£
+ï»¿// ============================= demo.cpp =====================================
+// ç›®æ ‡ï¼šæ¼”ç¤º cppjieba åœ¨â€œæ–‡ä»¶è¾“å…¥ -> åˆ†è¯/æ ‡æ³¨/å…³é”®è¯ -> æ–‡ä»¶è¾“å‡ºâ€æµç¨‹ã€‚
+// ç¤ºä¾‹ä¸»é¢˜ï¼šä¸­å±±å¤§å­¦ è®¡ç®—æœºå­¦é™¢çš„å­¦ä¹ ä¸ç§‘ç ”æ­£èƒ½é‡åœºæ™¯ï¼ˆå¥å­æ”¾åœ¨è¾“å…¥æ–‡ä»¶ä¸­ï¼Œä¸ç›´æ¥å†™æ­»åœ¨ä»£ç é‡Œï¼‰ã€‚
+// é‡è¦è¦æ±‚ï¼šä¸ºé¿å… Windows æ§åˆ¶å°ç¼–ç é—®é¢˜ï¼Œä»£ç ä¸­ä¸ç›´æ¥å‘ç»ˆç«¯è¾“å‡ºä»»ä½•ä¸­æ–‡ï¼ˆåªè¾“å‡ºè‹±æ–‡æç¤ºï¼‰ã€‚
+// å¦‚æœéœ€è¦æŸ¥çœ‹ä¸­æ–‡ç»“æœï¼Œè¯·æ‰“å¼€è¾“å‡ºæ–‡ä»¶ï¼ˆUTF-8 ç¼–ç ï¼‰ã€‚
 // ----------------------------------------------------------------------------
-// ¹¦ÄÜ¸ÅÀÀ£º
-// 1. ³õÊ¼»¯ cppjieba ·Ö´ÊÆ÷£¨¼ÓÔØ 5 Àà´Êµä£©
-// 2. ´ÓÊäÈëÎÄ¼şÖğĞĞ¶ÁÈ¡ÖĞÎÄ¾ä×Ó
-// 3. Ö´ĞĞ£º»ù±¾·Ö´Ê£¨º¬/²»º¬ HMM£©+ ËÑË÷·Ö´Ê + ´ÊĞÔ±ê×¢ + ¹Ø¼ü´Ê³éÈ¡
-// 4. ½«½á¹ûĞ´ÈëÊä³öÎÄ¼ş£¬¹©·ÖÎö¶Ô±È
+// åŠŸèƒ½æ¦‚è§ˆï¼š
+// 1. åˆå§‹åŒ– cppjieba åˆ†è¯å™¨ï¼ˆåŠ è½½ 5 ç±»è¯å…¸ï¼‰
+// 2. ä»è¾“å…¥æ–‡ä»¶é€è¡Œè¯»å–ä¸­æ–‡å¥å­
+// 3. æ‰§è¡Œï¼šåŸºæœ¬åˆ†è¯ï¼ˆå«/ä¸å« HMMï¼‰+ æœç´¢åˆ†è¯ + è¯æ€§æ ‡æ³¨ + å…³é”®è¯æŠ½å–
+// 4. å°†ç»“æœå†™å…¥è¾“å‡ºæ–‡ä»¶ï¼Œä¾›åˆ†æå¯¹æ¯”
 // ----------------------------------------------------------------------------
-// Ê¹ÓÃËµÃ÷£¨¼ÙÉèµ±Ç°¹¤×÷Ä¿Â¼ÎªÏîÄ¿¸ù£©£º
-//   ±àÒë£º g++ -std=c++11 -O2 -I. -I./cppjieba -o demo
-//   ÔËĞĞ£º ./demo                # Ê¹ÓÃÄ¬ÈÏ input/output ÎÄ¼şÃû
-//   »ò   £º ./demo input.txt out.txt
-// Ä¬ÈÏÊäÈë£º test_sentences.txt   Ä¬ÈÏÊä³ö£º output.txt
-// ÇëÈ·±£ dict/ Ä¿Â¼Óë¿ÉÖ´ĞĞÎÄ¼şÍ¬¼¶»òÂ·¾¶ÉèÖÃÕıÈ·¡£
+// ä½¿ç”¨è¯´æ˜ï¼ˆå‡è®¾å½“å‰å·¥ä½œç›®å½•ä¸ºé¡¹ç›®æ ¹ï¼‰ï¼š
+//   ç¼–è¯‘ï¼š g++ -std=c++11 -O2 -I. -I./cppjieba -o demo
+//   è¿è¡Œï¼š ./demo                # ä½¿ç”¨é»˜è®¤ input/output æ–‡ä»¶å
+//   æˆ–   ï¼š ./demo input.txt out.txt
+// é»˜è®¤è¾“å…¥ï¼š test_sentences.txt   é»˜è®¤è¾“å‡ºï¼š output.txt
+// è¯·ç¡®ä¿ dict/ ç›®å½•ä¸å¯æ‰§è¡Œæ–‡ä»¶åŒçº§æˆ–è·¯å¾„è®¾ç½®æ­£ç¡®ã€‚
 // ----------------------------------------------------------------------------
-// ½ÌÑ§ÒªµãËÙÀÀ£º
-// - Cut           : »ù±¾·Ö´Ê£¨¿ÉÑ¡ HMM£©
-// - CutForSearch  : ËÑË÷ÒıÇæÄ£Ê½£¬¸üÏ¸Á£¶È£¬Ìá¸ßÕÙ»Ø
-// - Tag           : ´ÊĞÔ±ê×¢£¬ÁË½â´ÊÓïÔÚ¾äÖĞµÄ½ÇÉ«
-// - Keyword (TF-IDF): Í³¼ÆÈ¨ÖØ£¬³éÈ¡¸ßÈ¨ÖØ´Ê
-// - InsertUserWord: ¶¯Ì¬Ìí¼Ó×¨ÓĞÃû´Ê£¨Èç¡°ÖĞÉ½´óÑ§¼ÆËã»úÑ§Ôº¡±£©ÌáÉıÊ¶±ğ×¼È·¶È
+// æ•™å­¦è¦ç‚¹é€Ÿè§ˆï¼š
+// - Cut           : åŸºæœ¬åˆ†è¯ï¼ˆå¯é€‰ HMMï¼‰
+// - CutForSearch  : æœç´¢å¼•æ“æ¨¡å¼ï¼Œæ›´ç»†ç²’åº¦ï¼Œæé«˜å¬å›
+// - Tag           : è¯æ€§æ ‡æ³¨ï¼Œäº†è§£è¯è¯­åœ¨å¥ä¸­çš„è§’è‰²
+// - Keyword (TF-IDF): ç»Ÿè®¡æƒé‡ï¼ŒæŠ½å–é«˜æƒé‡è¯
+// - InsertUserWord: åŠ¨æ€æ·»åŠ ä¸“æœ‰åè¯ï¼ˆå¦‚â€œä¸­å±±å¤§å­¦è®¡ç®—æœºå­¦é™¢â€ï¼‰æå‡è¯†åˆ«å‡†ç¡®åº¦
 // ----------------------------------------------------------------------------
 
 #include "cppjieba/Jieba.hpp"
@@ -33,7 +33,7 @@
 #include <vector>
 #include <cstdlib>
 
-// ÒÔ¶ş½øÖÆ¶ÁÈ¡£¬È·±£²»Ó°Ïì±àÂë´øÀ´µÄÓ°Ïì¡£ 
+// ä»¥äºŒè¿›åˆ¶è¯»å–ï¼Œç¡®ä¿ä¸å½±å“ç¼–ç å¸¦æ¥çš„å½±å“ã€‚ 
 bool ReadUtf8Lines(const std::string& filename, std::vector<std::string>& lines) {
     std::ifstream ifs(filename, std::ios::binary);
     if (!ifs.is_open()) {
@@ -41,7 +41,7 @@ bool ReadUtf8Lines(const std::string& filename, std::vector<std::string>& lines)
     }
     std::string line;
     while (std::getline(ifs, line)) {
-        // ´¦Àí Windows ÏÂ CRLF µÄ \r
+        // å¤„ç† Windows ä¸‹ CRLF çš„ \r
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
@@ -52,8 +52,8 @@ bool ReadUtf8Lines(const std::string& filename, std::vector<std::string>& lines)
     return true;
 }
 
-// ½« vector<string> ÓÃ·Ö¸ô·ûÆ´½ÓÎªµ¥ĞĞ×Ö·û´®¡£
-// ÓÃÍ¾£ºÊä³ö·Ö´Ê½á¹ûÊ±ÒÔÍ³Ò»µÄ "word1/word2/word3" ĞÎÊ½Õ¹Ê¾£¬±ãÓÚÈâÑÛ¶Ô±È²îÒì¡£
+// å°† vector<string> ç”¨åˆ†éš”ç¬¦æ‹¼æ¥ä¸ºå•è¡Œå­—ç¬¦ä¸²ã€‚
+// ç”¨é€”ï¼šè¾“å‡ºåˆ†è¯ç»“æœæ—¶ä»¥ç»Ÿä¸€çš„ "word1/word2/word3" å½¢å¼å±•ç¤ºï¼Œä¾¿äºè‚‰çœ¼å¯¹æ¯”å·®å¼‚ã€‚
 std::string Join(const std::vector<std::string>& items, const std::string& delim) {
     std::ostringstream oss;
     for (size_t i = 0; i < items.size(); ++i) {
@@ -64,23 +64,23 @@ std::string Join(const std::vector<std::string>& items, const std::string& delim
 }
 
 int main(int argc, char* argv[]) {
-    // ²½Öè 1: ½âÎöÃüÁîĞĞ²ÎÊı£¨½öÓ¢ÎÄÊä³ö£¬±ÜÃâ¿ØÖÆÌ¨ÖĞÎÄ±àÂëÎÊÌâ£©
-    std::string inputFile = "test_sentences.txt";   // È·±£ÖĞÎÄ±àÂëÊÇUTF-8 
-    std::string outputFile = "output.txt";          // default output filename
+    // æ­¥éª¤ 1: è§£æå‘½ä»¤è¡Œå‚æ•°ï¼ˆä»…è‹±æ–‡è¾“å‡ºï¼Œé¿å…æ§åˆ¶å°ä¸­æ–‡ç¼–ç é—®é¢˜ï¼‰
+    std::string inputFile = "data/test_sentences.txt";   // ç¡®ä¿ä¸­æ–‡ç¼–ç æ˜¯UTF-8 
+    std::string outputFile = "data/output.txt";          // default output filename
     if (argc >= 2) inputFile = argv[1];
     if (argc >= 3) outputFile = argv[2];
 
-    // ²½Öè 2: ³õÊ¼»¯ Jieba ·Ö´ÊÆ÷
-    // ×¢Òâ£ºÂ·¾¶Ó¦ÓëÔËĞĞÊ±¹¤×÷Ä¿Â¼Æ¥Åä£»Èô¿ÉÖ´ĞĞÎÄ¼şÓë dict/ ²»Í¬²ã¼¶£¬ĞèÒª×ÔĞĞµ÷Õû¡£
+    // æ­¥éª¤ 2: åˆå§‹åŒ– Jieba åˆ†è¯å™¨
+    // æ³¨æ„ï¼šè·¯å¾„åº”ä¸è¿è¡Œæ—¶å·¥ä½œç›®å½•åŒ¹é…ï¼›è‹¥å¯æ‰§è¡Œæ–‡ä»¶ä¸ dict/ ä¸åŒå±‚çº§ï¼Œéœ€è¦è‡ªè¡Œè°ƒæ•´ã€‚
     cppjieba::Jieba jieba(
-        "dict/jieba.dict.utf8",      // Ö÷´Êµä
-        "dict/hmm_model.utf8",       // HMM Ä£ĞÍ
-        "dict/user.dict.utf8",       // ÓÃ»§´Êµä
-        "dict/idf.utf8",             // IDF Í³¼ÆÎÄ¼ş
-        "dict/stop_words.utf8"       // Í£ÓÃ´Ê±í
+        "dict/jieba.dict.utf8",      // ä¸»è¯å…¸
+        "dict/hmm_model.utf8",       // HMM æ¨¡å‹
+        "dict/user.dict.utf8",       // ç”¨æˆ·è¯å…¸
+        "dict/idf.utf8",             // IDF ç»Ÿè®¡æ–‡ä»¶
+        "dict/stop_words.utf8"       // åœç”¨è¯è¡¨
     );
 
-    // ²½Öè 3: ¶ÁÈ¡ÊäÈëÎÄ¼ş¡£
+    // æ­¥éª¤ 3: è¯»å–è¾“å…¥æ–‡ä»¶ã€‚
     std::vector<std::string> lines;
     if (!ReadUtf8Lines(inputFile, lines)) {
         std::cerr << "[ERROR] cannot open input file: " << inputFile << std::endl;
@@ -91,45 +91,45 @@ int main(int argc, char* argv[]) {
         std::cerr << "[WARN ] input file is empty." << std::endl;
     }
 
-    // ²½Öè 4: ´ò¿ªÊä³öÎÄ¼ş
+    // æ­¥éª¤ 4: æ‰“å¼€è¾“å‡ºæ–‡ä»¶
     std::ofstream out(outputFile, std::ios::binary);
     if (!out.is_open()) {
         std::cerr << "[ERROR] cannot open output file: " << outputFile << std::endl;
         return EXIT_FAILURE;
     }
 
-    // Êä³öÎÄ¼şÍ·²¿ĞÅÏ¢¡£
+    // è¾“å‡ºæ–‡ä»¶å¤´éƒ¨ä¿¡æ¯ã€‚
     out << "===== cppjieba segmentation demo (Sun Yat-sen University CS School) =====\n";
     out << "InputFile: " << inputFile << "\n";
     out << "LineCount: " << lines.size() << "\n";
     out << "Note: Chinese sentences are read from input and processed; console prints remain English to avoid encoding issues.\n\n";
 
-    // ²½Öè 5: ²åÈëÓÃ»§´Ê£¨×¨ÓĞÃû´Ê£©ÒÔÌáÉıÊ¶±ğÍêÕûĞÔ
-    // ²»Êä³öÖĞÎÄµ½ÖÕ¶Ë£¬½öÔÚÎÄ¼şÖĞÌåÏÖĞ§¹û¡£
-    jieba.InsertUserWord("ÖĞÉ½´óÑ§¼ÆËã»úÑ§Ôº");
+    // æ­¥éª¤ 5: æ’å…¥ç”¨æˆ·è¯ï¼ˆä¸“æœ‰åè¯ï¼‰ä»¥æå‡è¯†åˆ«å®Œæ•´æ€§
+    // ä¸è¾“å‡ºä¸­æ–‡åˆ°ç»ˆç«¯ï¼Œä»…åœ¨æ–‡ä»¶ä¸­ä½“ç°æ•ˆæœã€‚
+    jieba.InsertUserWord("ä¸­å±±å¤§å­¦è®¡ç®—æœºå­¦é™¢");
 
-    // ²½Öè 6: ±éÀúÃ¿Ò»ĞĞ½øĞĞ·Ö´Ê¡¢±ê×¢¡¢¹Ø¼ü´Ê³éÈ¡
-    const size_t topk = 5; // ¹Ø¼ü´Ê³éÈ¡ÊıÁ¿£¨¿Éµ÷£©
+    // æ­¥éª¤ 6: éå†æ¯ä¸€è¡Œè¿›è¡Œåˆ†è¯ã€æ ‡æ³¨ã€å…³é”®è¯æŠ½å–
+    const size_t topk = 5; // å…³é”®è¯æŠ½å–æ•°é‡ï¼ˆå¯è°ƒï¼‰
     for (size_t idx = 0; idx < lines.size(); ++idx) {
         const std::string& sentence = lines[idx];
         out << "[LINE " << (idx + 1) << "] " << sentence << "\n";
 
-        // »ù±¾·Ö´Ê (Ê¹ÓÃ HMM)
+        // åŸºæœ¬åˆ†è¯ (ä½¿ç”¨ HMM)
         std::vector<std::string> cutWords;
         jieba.Cut(sentence, cutWords, true);
         out << "  Cut(HMM): " << Join(cutWords, "/") << "\n";
 
-        // »ù±¾·Ö´Ê (²»Ê¹ÓÃ HMM) ¡ª ¶Ô±È²îÒì
+        // åŸºæœ¬åˆ†è¯ (ä¸ä½¿ç”¨ HMM) â€” å¯¹æ¯”å·®å¼‚
         std::vector<std::string> cutWordsNoHMM;
         jieba.Cut(sentence, cutWordsNoHMM, false);
         out << "  Cut(NoHMM): " << Join(cutWordsNoHMM, "/") << "\n";
 
-        // ËÑË÷ÒıÇæÄ£Ê½·Ö´Ê£¨¸üÏ¸Á£¶È£©
+        // æœç´¢å¼•æ“æ¨¡å¼åˆ†è¯ï¼ˆæ›´ç»†ç²’åº¦ï¼‰
         std::vector<std::string> searchWords;
         jieba.CutForSearch(sentence, searchWords);
         out << "  CutForSearch: " << Join(searchWords, "/") << "\n";
 
-        // ´ÊĞÔ±ê×¢
+        // è¯æ€§æ ‡æ³¨
         std::vector<std::pair<std::string, std::string>> tagres;
         jieba.Tag(sentence, tagres);
         out << "  Tag: ";
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
         }
         out << "\n";
 
-        // ¹Ø¼ü´Ê³éÈ¡ (TF-IDF) ¡ª ·µ»Ø Word ½á¹¹£¬º¬È¨ÖØ
+        // å…³é”®è¯æŠ½å– (TF-IDF) â€” è¿”å› Word ç»“æ„ï¼Œå«æƒé‡
         std::vector<cppjieba::KeywordExtractor::Word> keywordres;
         jieba.extractor.Extract(sentence, keywordres, topk);
         out << "  Keywords(TF-IDF): ";
@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
         }
         out << "\n";
 
-        // ¹Ø¼ü´Ê³éÈ¡ (ÁíÒ»½Ó¿Ú) ¡ª Ö±½Ó pair<string,double>
+        // å…³é”®è¯æŠ½å– (å¦ä¸€æ¥å£) â€” ç›´æ¥ pair<string,double>
         std::vector<std::pair<std::string, double>> keywordres2;
         jieba.extractor.Extract(sentence, keywordres2, topk);
         out << "  Keywords2: ";
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
             if (i) out << ", ";
             out << keywordres2[i].first << ":" << keywordres2[i].second;
         }
-        out << "\n\n"; // ĞĞ¼ä¿ÕĞĞ
+        out << "\n\n"; // è¡Œé—´ç©ºè¡Œ
     }
 
     out << "===== END =====\n";

@@ -20,6 +20,7 @@ public:
 
     // 将秒数转换回 [HH:MM:SS] 格式
     static std::string formatTimestamp(long long totalSeconds) {
+        if (totalSeconds < 0) totalSeconds = 0; // 防止出现负数时间
         long long hours = totalSeconds / 3600;
         long long minutes = (totalSeconds % 3600) / 60;
         long long seconds = totalSeconds % 60;
