@@ -1,48 +1,19 @@
-# 编译器设置
-CXX = g++
-CXXFLAGS = -std=c++11 -O2 -I. -I.. -I../cppjieba -finput-charset=UTF-8 -fexec-charset=UTF-8
+# 总控 Makefile
 
-# 目录设置
-SRC_DIR = src
-BIN_DIR = bin
+.PHONY: all build run clean test gui
 
-# 目标文件
-TARGET = $(BIN_DIR)/hotwords
-TEST_DIR = tests
-TEST_BIN_DIR = $(BIN_DIR)/tests
+all: build
 
-# 源文件
-SRCS = $(SRC_DIR)/main.cpp
+build:
+	$(MAKE) -C backend
 
-# 默认目标
-all: $(TARGET)
+run: build
+	python frontend/main.py
 
-# 链接主程序
-$(TARGET): $(SRCS)
-	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $@.exe $^
+gui: run
 
-# 单元测试目标
-test: all $(TEST_BIN_DIR)/test_utils.exe $(TEST_BIN_DIR)/test_processor.exe $(TEST_BIN_DIR)/test_analyzer.exe
-	@echo Running tests...
-	$(TEST_BIN_DIR)/test_utils.exe
-	$(TEST_BIN_DIR)/test_analyzer.exe
-	$(TEST_BIN_DIR)/test_processor.exe
+test:
+	$(MAKE) -C backend test
 
-$(TEST_BIN_DIR)/%.exe: $(TEST_DIR)/%.cpp
-	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
-	@if not exist $(BIN_DIR)\tests mkdir $(BIN_DIR)\tests
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# 运行 (默认使用 input3.txt)
-run: all
-	$(TARGET).exe ../data/input3.txt
-
-# 启动图形界面
-gui: all
-	@echo Starting GUI...
-	python gui.py
-
-# 清理
 clean:
-	if exist $(BIN_DIR) rmdir /S /Q $(BIN_DIR)
+	$(MAKE) -C backend clean
